@@ -10,10 +10,20 @@ loc_lut = {}
 freq_lut = {}
 
 
+def parse(key, filepath):
+    code_freq = 0
+    with open(filepath) as csv_file:
+        reader = csv.reader(csv_file)
+        next(reader)
+        for row in reader:
+            code = reader[0]
+            if  code == key:
+                code_frequency +=1
+    code_frequency = code_frequency/5
+    return code_frequency
 
 with open((curr_path+"\\Data\\socal_supercharger_posts_mapping.csv"),'r') as csv_file:
     locations = csv.reader(csv_file)
-
     next(locations)
     for row in locations:
         temp_code = locations[0]
@@ -34,13 +44,10 @@ for file in os.listdir(directory):
     filename = os.fsdecode(file)
     if filename.startswith("Jan"):
 
-
-        with open(curr_path+"\\Data\\field_data\\"+filename) as csv_file:
-            reader = csv.reader(csv_file)
-            next(reader)
-            for row in reader:
-                code = reader[0]
         #parse file
+        #for each element in the dictionary, parse through the whole csv and return the frequency into the frequency array in freq_lut
+        for key in code_lut:
+            freq_arr = parse(key, (curr_path+"\\Data\\field_data\\"+filename))
         continue
 
     elif filename.startswith("Feb"):
