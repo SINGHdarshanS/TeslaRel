@@ -1,7 +1,7 @@
 import os
 import csv
 import numpy as np
-import pyplot from matplotlib as plt
+from matplotlib import pyplot as plt
 
 curr_path = os.getcwd()
 #LUT stands for LookUp Table
@@ -16,72 +16,91 @@ def parse(key, filepath):
         reader = csv.reader(csv_file)
         next(reader)
         for row in reader:
-            code = reader[0]
+            code = row[1]
             if  code == key:
-                code_frequency +=1
-    code_frequency = code_frequency/5
-    return code_frequency
+                code_freq +=1
+    code_freq = code_freq / 5
+    return code_freq
 
-with open((curr_path+"\\Data\\socal_supercharger_posts_mapping.csv"),'r') as csv_file:
-    locations = csv.reader(csv_file)
-    next(locations)
-    for row in locations:
-        temp_code = locations[0]
-        temp_location_act = locations[1]
-        temp_location_rep = locations[2]
-
-'''
-        -assigns keypairing only if key doesn't previously exist
-        -unnecessary for code_lut but doesn't hurt to have a bit of protection
-
-'''
-        code_lut.setdefault(temp_code, temp_location_act)
-        loc_lut.setdefault(temp_location_act, temp_location_rep)
-        freq_lut[temp_code] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+csv_file = open('Data\\socal_supercharger_posts_mapping.csv','r')
+locations = csv.reader(csv_file)
+next(locations)
+for row in locations:
+    temp_code = row[0]
+    temp_location_act = row[1]
+    temp_location_rep = row[2]
+    code_lut.setdefault(temp_code, temp_location_act)
+    loc_lut.setdefault(temp_location_act, temp_location_rep)
+    #first index will carry yearly total
+    freq_lut[temp_code] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 directory = os.fsencode((curr_path+"\\Data\\field_data"))
 for file in os.listdir(directory):
     filename = os.fsdecode(file)
-    if filename.startswith("Jan"):
+    for key in code_lut:
+        print("Parsing "+key + " in " + filename)
+        code_frequency = parse(key, (curr_path+"\\Data\\field_data\\"+filename))
 
-        #parse file
-        #for each element in the dictionary, parse through the whole csv and return the frequency into the frequency array in freq_lut
-        for key in code_lut:
-            freq_arr = parse(key, (curr_path+"\\Data\\field_data\\"+filename))
-        continue
+        if filename.startswith("Jan"):
+            freq_lut[key][1] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Feb"):
+            freq_lut[key][2] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Mar"):
+            freq_lut[key][3] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Apr"):
+            freq_lut[key][4] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("May"):
+            freq_lut[key][5] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Jun"):
+            freq_lut[key][6] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Jul"):
+            freq_lut[key][7] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Aug"):
+            freq_lut[key][8] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Sep"):
+            freq_lut[key][9] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Oct"):
+            freq_lut[key][10] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Nov"):
+            freq_lut[key][11] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        elif filename.startswith("Dec"):
+            freq_lut[key][12] = code_frequency
+            freq_lut[key][0] += code_frequency
+            continue
+        else:
+            continue
 
-    elif filename.startswith("Feb"):
-        #parse file
-        continue
-    elif filename.startswith("Mar"):
-        #parse file
-        continue
-    elif filename.startswith("Apr"):
-        #parse file
-        continue
-    elif filename.startswith("May"):
-        #parse file
-        continue
-    elif filename.startswith("Jun"):
-        #parse file
-        continue
-    elif filename.startswith("Jul"):
-        #parse file
-        continue
-    elif filename.startswith("Aug"):
-        #parse file
-        continue
-    elif filename.startswith("Sep"):
-        #parse file
-        continue
-    elif filename.startswith("Oct"):
-        #parse file
-        continue
-    elif filename.startswith("Nov"):
-        #parse file
-        continue
-    elif filename.startswith("Dec"):
-        #parse file
-        continue
-    else
-        continue
+
+months = ["2019","January","February","March","April","May","June","July","August","September","October","November","December"]
+
+for i, month in enumerate(months):
+    max = 0
+    max_code = "If you're seeing this, your code is broken"
+    for key in code_lut:
+        if freq_lut[key][i] >= max:
+            max = freq_lut[key][i]
+            max_code = key
+
+    print("In Southern California, the most frequently visited pump location in " + month + " was the " + code_lut[max_code] + " pump with a total of " + max + " visitors.")
