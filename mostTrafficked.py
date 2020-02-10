@@ -20,7 +20,7 @@ def parse(key, filepath):
             code = row[1]
             if  code == key:
                 code_freq +=1
-    code_freq = code_freq / 5
+    code_freq = code_freq // 5
     return code_freq
 
 csv_file = open('Data\\socal_supercharger_posts_mapping.csv','r')
