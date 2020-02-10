@@ -8,6 +8,7 @@ curr_path = os.getcwd()
 code_lut = {}
 loc_lut = {}
 freq_lut = {}
+loc_freq_lut = {}
 
 
 def parse(key, filepath):
@@ -31,7 +32,7 @@ for row in locations:
     temp_location_rep = row[2]
     code_lut.setdefault(temp_code, temp_location_act)
     loc_lut.setdefault(temp_location_act, temp_location_rep)
-    #first index will carry yearly total
+    loc_freq_lut.setdefault(temp_location_act, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     freq_lut[temp_code] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 directory = os.fsencode((curr_path+"\\Data\\field_data"))
@@ -43,62 +44,86 @@ for file in os.listdir(directory):
 
         if filename.startswith("Jan"):
             freq_lut[key][1] = code_frequency
+            loc_freq_lut[code_lut[key]][1] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of January." )
             continue
         elif filename.startswith("Feb"):
             freq_lut[key][2] = code_frequency
+            loc_freq_lut[code_lut[key]][2] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of February." )
             continue
         elif filename.startswith("Mar"):
             freq_lut[key][3] = code_frequency
+            loc_freq_lut[code_lut[key]][3] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of March." )
             continue
         elif filename.startswith("Apr"):
             freq_lut[key][4] = code_frequency
+            loc_freq_lut[code_lut[key]][4] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of April." )
             continue
         elif filename.startswith("May"):
             freq_lut[key][5] = code_frequency
+            loc_freq_lut[code_lut[key]][5] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of May." )
             continue
         elif filename.startswith("Jun"):
             freq_lut[key][6] = code_frequency
+            loc_freq_lut[code_lut[key]][6] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of June." )
             continue
         elif filename.startswith("Jul"):
             freq_lut[key][7] = code_frequency
+            loc_freq_lut[code_lut[key]][7] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of July." )
             continue
         elif filename.startswith("Aug"):
             freq_lut[key][8] = code_frequency
+            loc_freq_lut[code_lut[key]][8] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of August." )
             continue
         elif filename.startswith("Sep"):
             freq_lut[key][9] = code_frequency
+            loc_freq_lut[code_lut[key]][9] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of September." )
             continue
         elif filename.startswith("Oct"):
             freq_lut[key][10] = code_frequency
+            loc_freq_lut[code_lut[key]][10] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of October." )
             continue
         elif filename.startswith("Nov"):
             freq_lut[key][11] = code_frequency
+            loc_freq_lut[code_lut[key]][11] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of November." )
             continue
         elif filename.startswith("Dec"):
             freq_lut[key][12] = code_frequency
+            loc_freq_lut[code_lut[key]][12] += code_frequency
             freq_lut[key][0] += code_frequency
+            loc_freq_lut[code_lut[key]][0] += code_frequency
             print("There were " + str(code_frequency) + " uses of pump " + key + " in the month of December." )
             continue
         else:
@@ -110,9 +135,20 @@ months = ["2019","January","February","March","April","May","June","July","Augus
 for i, month in enumerate(months):
     max = 0
     max_code = "If you're seeing this, your code is broken"
+    max_loc = "If you're seeing this, your code is broken"
     for key in code_lut:
         if freq_lut[key][i] >= max:
             max = freq_lut[key][i]
             max_code = key
 
-    print("In Southern California, the most frequently visited pump location in " + month + " was the " + code_lut[max_code] + " pump with a total of " + str(max) + " visitors.")
+    print("In Southern California, the most frequently visited pump " + max_code + " in " + month + " was at " + code_lut[max_code] + " with a total of " + str(max) + " visitors.")
+    print("")
+    max = 0
+    for key in loc_lut:
+        if loc_freq_lut[key][i] >= max:
+            max = loc_freq_lut[key][i]
+            max_loc = key
+
+    print("In Southern California, the most frequently visited pump station in " + month + " was in " + code_lut[max_code] + " with a total of " + str(max) + " visitors.")
+    print("")
+    print("")
