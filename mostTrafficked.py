@@ -1,7 +1,7 @@
 import os
 import csv
 import numpy as np
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 
 curr_path = os.getcwd()
 #LUT stands for LookUp Table
